@@ -6,4 +6,42 @@ body {
     background: linear-gradient(135deg, #2c3e50, #1a1a2e);
     color: #fff;
   }
-  
+
+  .card {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 25px 20px;
+    border-radius: 20px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+  }
+
+  .weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .weather h2 {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .icon {
+    font-size: 200px;
+    color: #ffd84d;
+    margin: 10px 0;
+  }
+  .box {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.152);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
