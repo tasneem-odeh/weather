@@ -1,67 +1,72 @@
 async function getCityData(city) {
-    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`;
-  
-    const response = await fetch(url);
-  
-    const json = await response.json();
-  
-    return json;
-  }
-  
-  async function getWeatherData(latitude, longitude) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,is_day,rain,wind_speed_10m`;
-  
-    const response = await fetch(url);
-  
-    const json = await response.json();
-  
-    return json;
-  }
-  
-  async function getCityAndWeatherData(city) {
-    const cityData = await getCityData(city);
-    const latitude = cityData.results[0].latitude;
-    const longitude = cityData.results[0].longitude;
-  
-    const weatherData = await getWeatherData(latitude, longitude);
-  
-    return { cityData, weatherData };
-  }
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`;
 
+  const response = await fetch(url);
 
-  async function updateWeather(city) {
-    const data = await getCityAndWeatherData(city);
-  
-    const name = data.cityData.results[0].name;
-    const temp = data.weatherData.current.temperature_2m;
-    const wind = data.weatherData.current.wind_speed_10m;
-    const rain = data.weatherData.current.rain;
-    const isDay = data.weatherData.current.is_day;
+  const json = await response.json();
 
-    document.getElementById("city-name").textContent = name;
-  document.getElementById("temperature").textContent = `${temp}°C`;
-  document.getElementById("wind").textContent = `${wind} km/h`;
+  return json;
+}
+
+async function getWeatherData(latitude, longitude) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,is_day,rain,wind_speed_10m,relative_humidity_2m`;
+
+  const response = await fetch(url);
+
+  const json = await response.json();
+
+  return json;
+}
+
+async function getCityAndWeatherData(city) {
+  const cityData = await getCityData(city);
+  const latitude = cityData.results[0].latitude;
+  const longitude = cityData.results[0].longitude;
+
+  const weatherData = await getWeatherData(latitude, longitude);
+
+  return { cityData, weatherData };
+}
+
+async function updateWeather(city) {
+  const data = await getCityAndWeatherData(city);
+
+  const name = data.cityData.results[0].name;
+  const temp = data.weatherData.current.temperature_2m;
+  const tempUnit = data.weatherData.current_units.temperature_2m;
+  const wind = data.weatherData.current.wind_speed_10m;
+  const windUnit = data.weatherData.current_units.wind_speed_10m;
+  const rain = data.weatherData.current.rain;
+  const isDay = data.weatherData.current.is_day;
+  const humidityValue = data.weatherData.current.relative_humidity_2m;
+  const humidityValueUnit = data.weatherData.current_units.relative_humidity_2m;
+
+  document.getElementById("city-name").textContent = name;
+  document.getElementById("temperature").textContent = `${temp}${tempUnit}`;
+  document.getElementById("wind").textContent = `${wind} ${windUnit}`;
   document.getElementById("rain").textContent = `Chance of rain: ${rain}%`;
-
+  document.getElementById(
+    "humidityValue"
+  ).textContent = `${humidityValue} ${humidityValueUnit}`;
 
   const icon = document.getElementById("weather-icon");
   icon.className = isDay ? "iconoir-sun-light icon" : "iconoir-half-moon icon";
   icon.style.color = isDay ? "#ffd84d" : "#87CEEB";
 
+  const loader = document.getElementById("loader");
+  loader.classList.add("none");
 
+  const card = document.getElementById("card");
+  card.classList.add("flex");
+  card.classList.remove("none");
 }
 
-updateWeather("london");
-  
-//   getCityAndWeatherData("Stockholm").then((data) => {
-//     console.log(data);
-//     const p = document.createElement("p");
-  
-//       p.textContent = `The current temperature in ${data.cityData.results[0].name} is ${data.weatherData.current.temperature_2m}${data.weatherData.current_units.temperature_2m}`;
-//       p.id = "weather-info-p";
-//       p.className = "weather-info abed";
-  
-//     const weatherDiv = document.getElementById("weather-data");
-  
-//     weatherDiv?.appendChild(p);
-//   });
+document.addEventListener("DOMContentLoaded", () => {
+  const searchForm = document.getElementById("search");
+  searchForm.addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const input = searchForm.querySelector("input");
+    const inputValue = input.value;
+    updateWeather(inputValue);
+  });
+});
