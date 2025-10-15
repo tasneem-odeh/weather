@@ -6,30 +6,31 @@
   <title>Weather Card</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css" />
-  <script src="index.js"></script>
 
 </head>
 <body>
 <div class="card">
    <div class="weather">
-    <h2> Madrid </h2>
-    <p> chance of rain :0% </p>
-    <i class="iconoir-sun-light icon">  </i>
-    <h1 class="temp">31°</h1>
+    <h2 id="city-name"> Madrid </h2>
+    <p id="rain"> chance of rain :0% </p>
+    <i class="iconoir-sun-light icon"  id="weather-icon">  </i>
+    <h1 class="temp" id="temperature">31°</h1>
    </div>
 
    <div class="details"> 
 
    <div class="box"> 
     <p> UV INDEX </p>
-    <p class="value"> 3 </P>
+    <p class="value"  id="uv"> 3 </P>
    </div>
 
 <div class="box"> 
     <p> WIND </p>
-    <p class="value">  0.2 km/h </p>
+    <p class="value"  id="wind">  0.2 km/h </p>
 </div>
    </div>
 </div>
+<script src="index.js"></script>
+
 </body>
 </html>

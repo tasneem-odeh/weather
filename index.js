@@ -27,16 +27,41 @@ async function getCityData(city) {
   
     return { cityData, weatherData };
   }
+
+
+  async function updateWeather(city) {
+    const data = await getCityAndWeatherData(city);
   
-  getCityAndWeatherData("Stockholm").then((data) => {
-    console.log(data);
-    const p = document.createElement("p");
+    const name = data.cityData.results[0].name;
+    const temp = data.weatherData.current.temperature_2m;
+    const wind = data.weatherData.current.wind_speed_10m;
+    const rain = data.weatherData.current.rain;
+    const isDay = data.weatherData.current.is_day;
+
+    document.getElementById("city-name").textContent = name;
+  document.getElementById("temperature").textContent = `${temp}°C`;
+  document.getElementById("wind").textContent = `${wind} km/h`;
+  document.getElementById("rain").textContent = `Chance of rain: ${rain}%`;
+
+
+  const icon = document.getElementById("weather-icon");
+  icon.className = isDay ? "iconoir-sun-light icon" : "iconoir-half-moon icon";
+  icon.style.color = isDay ? "#ffd84d" : "#87CEEB";
+
+
+}
+
+updateWeather("london");
   
-      p.textContent = `The current temperature in ${data.cityData.results[0].name} is ${data.weatherData.current.temperature_2m}${data.weatherData.current_units.temperature_2m}`;
-      p.id = "weather-info-p";
-      p.className = "weather-info abed";
+//   getCityAndWeatherData("Stockholm").then((data) => {
+//     console.log(data);
+//     const p = document.createElement("p");
   
-    const weatherDiv = document.getElementById("weather-data");
+//       p.textContent = `The current temperature in ${data.cityData.results[0].name} is ${data.weatherData.current.temperature_2m}${data.weatherData.current_units.temperature_2m}`;
+//       p.id = "weather-info-p";
+//       p.className = "weather-info abed";
   
-    weatherDiv?.appendChild(p);
-  });
+//     const weatherDiv = document.getElementById("weather-data");
+  
+//     weatherDiv?.appendChild(p);
+//   });
