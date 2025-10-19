@@ -27,6 +27,20 @@ async function getCityAndWeatherData(city) {
 
   return { cityData, weatherData };
 }
+// Closure
+const searchHistoryManager = (function () {
+  const history = [];
+
+  return {
+    add(city) {
+      // history.push(city);
+      history.push({ city: city, time: new Date() });
+    },
+    getAll() {
+      return [...history]; 
+    },
+  };
+})();
 
 async function updateWeather(city) {
   const data = await getCityAndWeatherData(city);
@@ -59,7 +73,37 @@ async function updateWeather(city) {
   const card = document.getElementById("card");
   card.classList.add("flex");
   card.classList.remove("none");
+
+  searchHistoryManager.add(
+  city
+);
+
+console.log(searchHistoryManager.getAll());
+  updateHistoryTable();
 }
+ 
+function updateHistoryTable() {
+  const container = document.getElementById("history-container");
+  const tbody = document.querySelector("#history-table tbody");
+
+  const allHistory = searchHistoryManager.getAll();
+
+  if (allHistory.length === 0) {
+    container.classList.add("none");
+    return;
+  }
+
+  container.classList.remove("none");
+  tbody.innerHTML = "";
+
+  allHistory.forEach((item, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${index + 1}</td><td>${item.city}</td><td>${item.time.toLocaleTimeString()}</td>`;
+    tbody.appendChild(row);
+  });
+}
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("search");
